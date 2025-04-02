@@ -17,11 +17,10 @@ export default function FinanceLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={primaryFont.className}  >
-      <body>
+  
+      <div>
         <header>FLEET MODULE</header>
                 {children}
-      </body>
-    </html>
+      </div>
   );
 }
