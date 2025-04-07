@@ -38,7 +38,7 @@ export default function ForPage() {
         </CardHeader>
         <CardContent >
           <form onSubmit={handleSubmit} className="space-y-4 w-full ">
-            <h1 className="text-white font-bold text-2xl">FORGET PASSWORD</h1>
+            <h1 className="text-white font-bold text-2xl">FORGOT PASSWORD</h1>
             <div className="space-y-2">
               <div className="relative">
                 <User className="absolute left-3 top-3 h-5 w-5 text-gray-500" />
@@ -63,13 +63,13 @@ export default function ForPage() {
           </form>
         </CardContent>
         <CardFooter className="flex  justify-center pt-0">
-          <Button
-            type="button"
-            className="w-full text-white text-sm underline font-bold h-12 bg-transparent cursor-pointer transition-all duration-500 hover:bg-white hover:text-black "
+          <Link
+            href='/login'
+            className="w-full text-white text-sm underline font-bold h-12 bg-transparent cursor-pointer transition-all duration-500 "
      
           >
             Back to Login
-          </Button>
+          </Link>
         </CardFooter>
       </Card>
     </div>
