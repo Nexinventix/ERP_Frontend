@@ -1,11 +1,32 @@
 import type { Metadata } from "next";
 import { Inter } from 'next/font/google';
+import MainRoot from "./_components/layout/MainRoot";
+import {
+
+  UsersRound ,
+ 
+} from 'lucide-react';
+interface Navigation {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+}
+
+const navigations: Navigation[] = [
+  {
+    href: '/admin',
+    icon: <UsersRound  color="black" size={20} />,
+    label: 'Users',
+  },
+];
+
 
 const primaryFont = Inter({
   display: 'swap',
   subsets: ['latin'],
   variable: '--font-primary',
 });
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,10 +37,11 @@ export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) {   
   return (
-    <section className={`${primaryFont.variable}`}>
-      {children}
-    </section>
+    <MainRoot navigation={navigations}>
+         {children}
+         </MainRoot>
+    
   );
 }
