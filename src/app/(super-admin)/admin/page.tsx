@@ -1,10 +1,12 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Search,
   Filter,
   MoreVertical,
   PlusIcon,
+  Table,
+  Trash,
 
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -14,73 +16,110 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Link from 'next/link'
+import TableOptions from '@/components/app/TableOptions'
+import  ViewEditProfileModal  from './_components/ViewEditProfileModal'
+import { User,UserRoundPen ,Key, CloudDownload, Trash2  } from 'lucide-react';
+import DeleteConfirmatioNodal from '@/components/app/DeleteConfirmatioNodal'
 
-const users:any = [
+const users: any = [
   {
     id: 1,
-    name: "Sandeep Kandula",
+    firstName: "Sandeep",
+    lastName: "Kandula",
     email: "SandeepKandula@gmail.com",
     status: "Active",
     department: "Fleet Management",
     avatar: "",
     role: "Manager",
+    phoneNo: "+1234567890",
   },
   {
     id: 2,
-    name: "Nick",
+    firstName: "Nick",
+    lastName: "",
     email: "nick@dreamworks.com",
     status: "Inactive",
     department: "HR Department",
     avatar: "",
     role: "Staff",
+    phoneNo: "+1234567890",
   },
   {
     id: 3,
-    name: "Chuks",
+    firstName: "Chuks",
+    lastName: "",
     email: "chuks@dreamworks.com",
     status: "Inactive",
     department: "HR Department",
     avatar: "",
     role: "Staff",
+    phoneNo: "+1234567890",
   },
   {
     id: 4,
-    name: "Michael Angelo",
+    firstName: "Michael",
+    lastName: "Angelo",
     email: "michaelangelo@dreamworks.com",
     status: "Inactive",
     department: "Finance",
     avatar: "",
     role: "Manager",
+    phoneNo: "+1234567890",
   },
   {
     id: 5,
-    name: "Ahmad Zarah",
+    firstName: "Ahmad",
+    lastName: "Zarah",
     email: "ahmadzarah@dreamworks.com",
     status: "Inactive",
     department: "HR Department",
     avatar: "",
     role: "Staff",
+    phoneNo: "+1234567890",
   },
   {
     id: 6,
-    name: "Jack Wilson",
+    firstName: "Jack",
+    lastName: "Wilson",
     email: "jackwilson@dreamworks.com",
     status: "Inactive",
     department: "Finance",
     avatar: "",
     role: "Staff",
+    phoneNo: "+1234567890",
   },
   {
     id: 7,
-    name: "Sophia King",
+    firstName: "Sophia",
+    lastName: "King",
     email: "sophiaking@dreamworks.com",
     status: "Inactive",
     department: "Fleet Management",
     avatar: "",
     role: "Staff",
+    phoneNo: "+1234567890",
   },
 ]
 const Admin = () => {
+const [isModalOpen, setIsModalOpen] = React.useState(false);
+const [selectedUser, setSelectedUser] = React.useState<any>(null);
+const [isDialogOpen, setIsDialogOpen] = useState(false) 
+const [userToDelete, setUserToDelete] = useState<any>(null) 
+
+const handleDeleteUser = () => {
+  if (userToDelete) {
+    console.log(`Deleting user with ID: ${userToDelete.id}`)
+    // Perform the delete operation (e.g., API call)
+    // Example: await deleteUser(userToDelete.id);
+    setIsDialogOpen(false) // Close the dialog after deletion
+    setUserToDelete(null) // Reset the userToDelete state
+  }
+}
+
+const handleViewProfile = (user: any) => {
+  setSelectedUser(user)
+  setIsModalOpen(true)
+}
   return (
   <div>
     <main className="flex-1">
@@ -178,14 +217,15 @@ const Admin = () => {
                   {users.map((user:any) => (
                     <div key={user.id} className="grid grid-cols-12 items-center px-6 py-4">
                       <div className="col-span-4 flex items-center gap-3">
-                        <Avatar>
-                          <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
-                          <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <div className="font-medium">{user.name}</div>
-                          <div className="text-sm text-gray-500">{user.email}</div>
-                        </div>
+                      <Avatar>
+                            <AvatarImage src={user.avatar || "/placeholder.svg"} alt={`${user.firstName} ${user.lastName}`.trim()} />
+                            <AvatarFallback>{user.firstName.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                  <div>
+                    <div className="font-medium">{`${user.firstName} ${user.lastName}`.trim()}</div>
+                    <div className="text-sm text-gray-500">{user.email}</div>
+                  </div>
+
                       </div>
                       <div className="col-span-2">
                         <Badge
@@ -202,9 +242,50 @@ const Admin = () => {
                       <div className="col-span-3 text-sm">{user.department}</div>
                       <div className="col-span-2 text-sm">{user.role}</div>
                       <div className="col-span-1 text-right">
-                        <Button variant="ghost" size="icon">
-                          <MoreVertical className="h-4 w-4" />
-                        </Button>
+                       <TableOptions 
+                       variant="dotsVertical"
+                       options={[
+                        {
+                          label: "View Profile",
+                          onClick: () => {
+                            setSelectedUser(user);
+                            setIsModalOpen(true);
+                          },
+                          icon: <User className="h-4 w-4" />,
+                        },
+                        {
+                          label: "Edit Profile",
+                          onClick: () => {
+                            setSelectedUser(user);
+                            setIsModalOpen(true);
+                            setSelectedUser({ ...user, isEditing: true });
+                          },
+                          icon: <UserRoundPen  className="h-4 w-4" />,
+                        },
+                        {
+                          label: "Change password",
+                          onClick: () => {
+                          console.log('Change password');
+                          },
+                          icon: <Key  className="h-4 w-4" />,
+                        },
+                        {
+                          label: "Export details",
+                          onClick: () => {
+                          console.log('Eport details');
+                          },
+                          icon: <CloudDownload  className="h-4 w-4" />,
+                        },
+                        {
+                          label: "Delete User",
+                          onClick: () => {
+                            setUserToDelete(user) 
+                            setIsDialogOpen(true) 
+                          },
+                          icon: <Trash2  className="h-4 w-4" />,
+                        },
+                       ]}
+                       />
                       </div>
                     </div>
                   ))}
@@ -227,14 +308,14 @@ const Admin = () => {
                     .map((user:any) => (
                       <div key={user.id} className="grid grid-cols-12 items-center px-6 py-4">
                         <div className="col-span-4 flex items-center gap-3">
-                          <Avatar>
-                            <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
-                            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <div className="font-medium">{user.name}</div>
-                            <div className="text-sm text-gray-500">{user.email}</div>
-                          </div>
+                        <Avatar>
+  <AvatarImage src={user.avatar || "/placeholder.svg"} alt={`${user.firstName} ${user.lastName}`.trim()} />
+  <AvatarFallback>{user.firstName.charAt(0)}</AvatarFallback>
+</Avatar>
+<div>
+  <div className="font-medium">{`${user.firstName} ${user.lastName}`.trim()}</div>
+  <div className="text-sm text-gray-500">{user.email}</div>
+</div>
                         </div>
                         <div className="col-span-2">
                           <Badge className="bg-green-100 text-green-800 hover:bg-green-100">{user.status}</Badge>
@@ -267,12 +348,12 @@ const Admin = () => {
                     .map((user:any) => (
                       <div key={user.id} className="grid grid-cols-12 items-center px-6 py-4">
                         <div className="col-span-4 flex items-center gap-3">
-                          <Avatar>
-                            <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
-                            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                        <Avatar>
+                            <AvatarImage src={user.avatar || "/placeholder.svg"} alt={`${user.firstName} ${user.lastName}`.trim()} />
+                            <AvatarFallback>{user.firstName.charAt(0)}</AvatarFallback>
                           </Avatar>
                           <div>
-                            <div className="font-medium">{user.name}</div>
+                            <div className="font-medium">{`${user.firstName} ${user.lastName}`.trim()}</div>
                             <div className="text-sm text-gray-500">{user.email}</div>
                           </div>
                         </div>
@@ -296,6 +377,23 @@ const Admin = () => {
           </Tabs>
         </div>
       </main>
+      {selectedUser && (
+        <ViewEditProfileModal
+          user={selectedUser}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
+
+      <DeleteConfirmatioNodal
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        onConfirm={handleDeleteUser}
+        title="Confirm User Deletion"
+        description="Are you sure you want to delete this user? All data associated with this account will be permanently removed. This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+      />
   </div>
   )
 }
