@@ -1,4 +1,5 @@
 "use client"
+import { cn } from "@/lib/utils"
 import { useState } from "react"
 import {
     Settings, 
@@ -12,15 +13,17 @@ import {
     userName: string;
     avatarFallback: string;
     email?: string;
+    position?: 'top' | 'bottom'; 
+    className?: string;
   }
-function UserDropdown({ userName, avatarFallback, email = "admin@dreamworks.com" }: AdminDropdownProps) {
+function UserDropdown({ userName, avatarFallback, email = "admin@dreamworks.com", position = 'top' , className }: AdminDropdownProps) {
     const [isOpen, setIsOpen] = useState(false)
   
     return (
       <div className="relative">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex w-full items-center justify-between rounded-md bg-[#0F172A] px-4 py-3 text-white"
+          className={cn("flex w-full items-center h-10 justify-between rounded-md bg-[#0F172A] px-2 py-3 text-white", className)}
         >
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8 border-2 border-white/20">
@@ -33,7 +36,7 @@ function UserDropdown({ userName, avatarFallback, email = "admin@dreamworks.com"
         </button>
   
         {isOpen && (
-          <div className="absolute bottom-full left-0 mb-1 w-full overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg">
+          <div  className={`absolute ${position === 'top' ? 'bottom-full mb-1' : 'top-full mt-1'} left-0 w-full overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg`}>
             <div className="p-2">
               <div className="mb-2 px-3 py-1 text-xs font-medium text-gray-500">admin@dreamworks.com</div>
               <button className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
