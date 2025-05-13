@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowRight } from 'lucide-react'
 import React from 'react'
 import { AreaChart, Area, ResponsiveContainer, Tooltip, PieChart,Pie, Cell } from 'recharts';
+import { useRouter } from 'next/navigation'
 
 const data:any = [
   { name: 'Jan', value: 200 },
@@ -33,16 +34,20 @@ const fleetData = [
 ];
 
 const Fleet = () => {
+  const router = useRouter()
   return (
     <div className="container mx-auto py-2 ">
         <h1 className="text-3xl font-bold mb-8">Welcome, Janeth Asuquo!</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Overview Card */}
           <div className="bg-white rounded-lg border shadow-sm">
-  <div className="flex flex-row justify-between items-center p-4 border-b">
-    <h3 className="font-semibold text-lg">Overview</h3>
-    <ArrowRight className="h-5 w-5 text-gray-500" />
-  </div>
+          <div 
+            className="flex flex-row justify-between items-center p-4 border-b cursor-pointer hover:bg-gray-50"
+            onClick={() => router.push('/fleet/vehicles')}
+          >
+            <h3 className="font-semibold text-lg">Overview</h3>
+            <ArrowRight className="h-5 w-5 text-gray-500" />
+          </div>
   <div className="p-4">
     <div className='flex'>
       <div className="flex mb-4 w-full h-52">

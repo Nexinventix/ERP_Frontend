@@ -31,7 +31,7 @@ const navigations: Navigation[] = [
     label: 'Fleet Setup',
   },
   {
-    href: '/fleet/driver-management',
+    href: '/fleet/drivers',
     icon: <UserCog color="black" size={20} />,
     label: 'Driver Management',
   },

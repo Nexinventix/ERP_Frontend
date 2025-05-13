@@ -31,13 +31,16 @@ const RootSidebarDesktop: React.FC<RootSidebarDesktopProps> = ({
     <div className="lg:z-30 lg:flex hidden lg:flex-col h-screen  w-76 bg-gray-50 ">
       <div className="flex flex-col gap-y-2 overflow-y-auto border-r border-gray-200 bg-grey-50 px-2 py-2 flex-grow">
         <div className="flex  h-auto shrink-0 items-center justify-center">
-          <Image
-             src="/assets/images/cover.png"
-            className="h-34 w-52"
-            alt="Proteux Logo"
-            width={100}
-            height={100}
-          />
+        <div className="h-24 w-full flex justify-center items-center bg-white"> 
+            <Image
+              src="/assets/images/cover.png"
+              className="object-contain h-full w-auto"
+              alt="Proteux Logo"
+              width={208}
+              height={100}
+              priority
+            />
+          </div>
         </div>
 
         <Button
@@ -67,7 +70,7 @@ const RootSidebarDesktop: React.FC<RootSidebarDesktopProps> = ({
                 >
                   <a
                     href={item.href}
-                    className={`flex gap-3 items-center text-sm px-6 font-semibold transition-all ${
+                    className={`flex gap-3 items-center text-[12px] px-6 font-semibold transition-all ${
                       isActive
                         ? 'bg-blue-100 text-black pt-3 pb-3 font-bold rounded-xl'
                         : 'hover:text-[#E0864F] text-[#3E4755] font-bold'
