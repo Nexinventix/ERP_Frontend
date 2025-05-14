@@ -101,30 +101,6 @@ const RootSidebarDesktop: React.FC<RootSidebarDesktopProps> = ({
           </div>
     
         </Button>
-          {/* <ul className="flex flex-1 flex-col gap-y-4">
-            {adminNav?.map((item, index) => {
-              const isActive = pathname === item.href;
-
-              return (
-                <li
-                  key={`desktop-admin-${index}`}
-                  className="relative text-center cursor-pointer"
-                >
-                  <a
-                    href={item.href}
-                    className={`flex gap-3 items-center px-3 font-semibold transition-all ${
-                      isActive
-                        ? 'bg-blue-100 text-black pt-3 pb-3 rounded-xl'
-                        : 'hover:text-[#E0864F] text-[#3E4755]'
-                    }`}
-                  >
-                    <span className="h-6 w-6">{item.icon}</span>
-                    {item.label}
-                  </a>
-                </li>
-              );
-            })}
-          </ul> */}
         </nav>
       </div>
     </div>
