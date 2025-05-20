@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Plus, MoreVertical } from "lucide-react"
 // import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
-import { AddVehicleModal } from "../_components/AddVechicleModal"
+import { AddScheduleModal } from "../_components/AddScheduleModal"
 
 interface MaintenanceSchedule {
   id: string
@@ -96,8 +96,7 @@ export default function FleetSetupPage() {
           <Plus className="mr-2 h-4 w-4" /> Add New Schedule
         </Button>
       </div>
-      <AddVehicleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-
+      <AddScheduleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <div className="bg-white rounded-lg overflow-hidden border border-gray-200">
         {/* Table Header */}
         <div className="bg-black text-white px-4 py-3 grid grid-cols-7 gap-4">

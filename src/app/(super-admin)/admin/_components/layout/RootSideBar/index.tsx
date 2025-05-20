@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import UserDropdown from '@/components/app/UserDropDown';
+import { useSelector } from 'react-redux';
 // import { AddMenu } from '../AddMenu';
 
 type NavItem = {
@@ -21,6 +22,7 @@ const RootSidebarDesktop: React.FC<RootSidebarDesktopProps> = ({
   adminNav,
 }) => {
   const pathname = usePathname();
+  const isAuthenticatedUser = useSelector((state: any) => state?.auth?.user)
 
   return (
     <div className="lg:z-30 lg:flex hidden lg:flex-col h-screen w-76 bg-gray-50 ">
@@ -66,7 +68,7 @@ const RootSidebarDesktop: React.FC<RootSidebarDesktopProps> = ({
         {/* Admin Navigation */}
         <nav className="flex flex-col">
           <UserDropdown
-            userName="Admin"
+            userName={`${isAuthenticatedUser?.firstName} ${isAuthenticatedUser?.lastName}`}
             avatarFallback="Admin"
             />
           {/* <ul className="flex flex-1 flex-col gap-y-4">

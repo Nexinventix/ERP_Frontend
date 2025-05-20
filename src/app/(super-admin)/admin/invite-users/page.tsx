@@ -4,6 +4,9 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Link from "next/link"
 
+
+// TODO:CONSUME INVITE USER ENDPOINT
+
 export default function InviteUserPage() {
   return (
     <div className="min-h-screen bg-white p-6">
