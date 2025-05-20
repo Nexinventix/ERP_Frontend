@@ -20,6 +20,7 @@ import TableOptions from '@/components/app/TableOptions'
 import  ViewEditProfileModal  from './_components/ViewEditProfileModal'
 import { User,UserRoundPen ,Key, CloudDownload, Trash2  } from 'lucide-react';
 import DeleteConfirmatioNodal from '@/components/app/DeleteConfirmatioNodal'
+import { useSelector } from 'react-redux'
 
 const users: any = [
   {
@@ -105,6 +106,7 @@ const [isModalOpen, setIsModalOpen] = React.useState(false);
 const [selectedUser, setSelectedUser] = React.useState<any>(null);
 const [isDialogOpen, setIsDialogOpen] = useState(false) 
 const [userToDelete, setUserToDelete] = useState<any>(null) 
+const isAuthenticated = useSelector((state: any) => state?.auth?.user)
 
 const handleDeleteUser = () => {
   if (userToDelete) {

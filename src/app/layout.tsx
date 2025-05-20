@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from 'next/font/google';
 import "./globals.css";
-// Google Fonts support
+import { ReduxProvider } from "@/lib/redux/provider";
+
 
 const primaryFont = Inter({
   display: 'swap',
@@ -20,11 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
    return (
-     <html>
-        <body>
-          <main> {children}</main>
-      
+     <html lang="en">
+        <body className={primaryFont.variable}>
+          <ReduxProvider>
+            {children}
+          </ReduxProvider>
         </body>
-   </html>
-  )
+     </html>
+   )
 }

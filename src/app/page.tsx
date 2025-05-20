@@ -5,19 +5,52 @@ import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { useSelector } from 'react-redux'
+import { format } from 'date-fns';
+import { toast } from "sonner"
 
 export default function Dashboard() {
     const router = useRouter()
   const [selectedModule, setSelectedModule] = useState("")
   const [showUnavailable, setShowUnavailable] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const isAuthenticated = useSelector((state: any) => state.auth.token)
+  const isUser = useSelector((state: any) => state.auth.user)
+  
+  console.log("Get Started clicked", isAuthenticated)
 
+  const currentDate = new Date();
+  const formattedDateTime = format(currentDate, "EEEE, MMMM d, yyyy, h:mm a 'WAT'")
   const handleGetStarted = () => {
+  
+    // setIsLoading(true)
+    // if (selectedModule === "FLEET") {
+    //   router.push("/fleet")
+    // } else if (selectedModule) {
+    //   setShowUnavailable(true)
+    // }
+    if (!isAuthenticated) {
+      // If not authenticated, redirect to login
+      router.push('/login')
+      return
+    }
+
+    if (selectedModule === "ADMIN" && !isUser?.isSuperAdmin) {
+      toast.error("You don't have permission to access the admin dashboard")
+      return
+    }
+
+    // If authenticated, handle module routing
     if (selectedModule === "FLEET") {
       router.push("/fleet")
-    } else if (selectedModule) {
+    }else if (selectedModule === "ADMIN") {
+      router.push("/admin")
+    } 
+     else if (selectedModule) {
       setShowUnavailable(true)
     }
+    
+    setIsLoading(false)
   }
   return (
     <div className="relative flex flex-col min-h-screen text-white overflow-hidden">
@@ -43,12 +76,17 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="mt-8">
-          <h2 className="text-lg font-normal">Welcome back, Janeth Asuquo!</h2>
-          <div className="text-xs text-gray-300 mt-1">
-            <p>Monday, May 5, 2025, 3:45 PM WAT</p>
-            <p>Lagos, Lagos, Nigeria</p>
-          </div>
-        </div>
+        {
+          isUser && (
+            <h2 className="text-lg font-normal">{`${isUser.firstName} ${isUser.lastName}`}</h2>
+          )
+        }
+         </div>
+        <div className="text-xs text-gray-300 mt-1">
+        <p>{formattedDateTime}</p>
+              <p>Lagos, Lagos, Nigeria</p>
+            </div>
+     
       </header>
 
       {/* Main Content */}
@@ -71,6 +109,9 @@ export default function Dashboard() {
               <option value="" className="text-gray-600">
                 - SELECT -
               </option>
+              <option value="ADMIN" className="text-gray-600">
+        ADMIN DASHBOARD
+      </option>
               <option value="FLEET" className="text-gray-600">
                 FLEET
               </option>

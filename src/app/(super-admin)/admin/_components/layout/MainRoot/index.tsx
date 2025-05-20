@@ -1,6 +1,8 @@
 
 import { StaticImageData } from 'next/image';
 import { RootSidebarDesktop, RootSidebarMobile } from '../RootSideBar';
+import { useSelector } from 'react-redux';
+
 
 
 // import { SidebarDesktop, SidebarMobile } from './ProductSidebar';
