@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from 'next/font/google';
 import "./globals.css";
 import { ReduxProvider } from "@/lib/redux/provider";
+import { Toaster } from "sonner";
 
 
 const primaryFont = Inter({
@@ -25,6 +26,7 @@ export default function RootLayout({
         <body className={primaryFont.variable}>
           <ReduxProvider>
             {children}
+            <Toaster />
           </ReduxProvider>
         </body>
      </html>
