@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Plus, MoreVertical } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+// import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { AddScheduleModal } from "../_components/AddScheduleModal"
 
@@ -138,7 +138,7 @@ export default function FleetSetupPage() {
                 </Badge>
               </div>
               <div className="flex justify-end">
-                <DropdownMenu>
+                {/* <DropdownMenu>
                   <DropdownMenuTrigger asChild> 
                     <Button variant="ghost" size="icon">
                       <MoreVertical className="h-4" />
@@ -154,7 +154,7 @@ export default function FleetSetupPage() {
                       <DropdownMenuItem>Activate</DropdownMenuItem>
                     )}
                   </DropdownMenuContent>
-                </DropdownMenu>
+                </DropdownMenu> */}
               </div>
             </div>
           ))}

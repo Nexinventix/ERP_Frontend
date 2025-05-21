@@ -4,6 +4,9 @@ import { ArrowRight } from 'lucide-react'
 import React from 'react'
 import { AreaChart, Area, ResponsiveContainer, Tooltip, PieChart,Pie, Cell } from 'recharts';
 import { useRouter } from 'next/navigation'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/lib/redux/store'
+
 
 const data:any = [
   { name: 'Jan', value: 200 },
@@ -35,9 +38,11 @@ const fleetData = [
 
 const Fleet = () => {
   const router = useRouter()
+  const user = useSelector((state: RootState) => state.auth.user);
+
   return (
     <div className="container mx-auto py-2 ">
-        <h1 className="text-3xl font-bold mb-8">Welcome, Janeth Asuquo!</h1>
+        <h1 className="text-3xl font-bold mb-8">Welcome, {user?.firstName} {user?.lastName}!</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Overview Card */}
           <div className="bg-white rounded-lg border shadow-sm">
@@ -94,10 +99,10 @@ const Fleet = () => {
                   </div>
                   <div>
                     <div className="space-y-2 p-4">
-                      <p className="text-sm text-gray-500">Total miles driven</p>
+                      <p className="text-sm text-gray-500">Total km driven</p>
                       <p className="text-2xl font-semibold">
                         <span>58023K</span>
-                        <span className="text-gray-500 ml-2">Miles</span>
+                        <span className="text-gray-500 ml-2">Km</span>
                       </p>
                     </div>
                     <div className="w-full h-32">
@@ -131,8 +136,8 @@ const Fleet = () => {
                     <div className="space-y-2 p-4">
                       <p className="text-sm text-gray-500">Total expense</p>
                       <p className="text-2xl font-semibold">
-                        <span>3.8M</span>
-                        <span className="text-gray-500 ml-2">Miles</span>
+                        <span>3.8</span>
+                        <span className="text-gray-500 ml-2">M</span>
                       </p>
                     </div>
                     <div className="w-full h-32">
@@ -173,7 +178,7 @@ const Fleet = () => {
                 <p className="text-sm text-gray-500">Total fuel used</p>
                 <p className="text-2xl font-semibold">
                   <span>45038</span>
-                  <span className="text-gray-500 ml-2">Gallons</span>
+                  <span className="text-gray-500 ml-2">Litres</span>
                 </p>
               </div>
               <div className="w-full h-40">

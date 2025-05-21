@@ -1,6 +1,6 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Image from 'next/image';
 import UserDropdown from '@/components/app/UserDropDown';
@@ -26,12 +26,12 @@ const RootSidebarDesktop: React.FC<RootSidebarDesktopProps> = ({
 }) => {
   const pathname = usePathname();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const router = useRouter();
   return (
     <div className="lg:z-30 lg:flex hidden lg:flex-col h-screen  w-76 bg-gray-50 ">
       <div className="flex flex-col gap-y-2 overflow-y-auto border-r border-gray-200 bg-grey-50 px-2 py-2 flex-grow">
         <div className="flex  h-auto shrink-0 items-center justify-center">
-        <div className="h-24 w-full flex justify-center items-center bg-white"> 
+        <div className="h-24 w-full flex justify-center items-center bg-white cursor-pointer" onClick={() => router.push('/')}> 
             <Image
               src="/assets/images/cover.png"
               className="object-contain h-full w-auto"
@@ -51,7 +51,7 @@ const RootSidebarDesktop: React.FC<RootSidebarDesktopProps> = ({
         >
           <Plus className={`h-5 w-5 transition-transform`} />
           <div className="flex items-center">
-            <span className="text-sm font-medium ">Add vechile</span>
+            <span className="text-sm font-medium ">Add vehicle</span>
           </div>
     
         </Button>
@@ -101,30 +101,6 @@ const RootSidebarDesktop: React.FC<RootSidebarDesktopProps> = ({
           </div>
     
         </Button>
-          {/* <ul className="flex flex-1 flex-col gap-y-4">
-            {adminNav?.map((item, index) => {
-              const isActive = pathname === item.href;
-
-              return (
-                <li
-                  key={`desktop-admin-${index}`}
-                  className="relative text-center cursor-pointer"
-                >
-                  <a
-                    href={item.href}
-                    className={`flex gap-3 items-center px-3 font-semibold transition-all ${
-                      isActive
-                        ? 'bg-blue-100 text-black pt-3 pb-3 rounded-xl'
-                        : 'hover:text-[#E0864F] text-[#3E4755]'
-                    }`}
-                  >
-                    <span className="h-6 w-6">{item.icon}</span>
-                    {item.label}
-                  </a>
-                </li>
-              );
-            })}
-          </ul> */}
         </nav>
       </div>
     </div>
