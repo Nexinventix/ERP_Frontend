@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/lib/redux/store'
 
+
 const data:any = [
   { name: 'Jan', value: 200 },
   { name: 'Feb', value: 250 },
@@ -38,6 +39,7 @@ const fleetData = [
 const Fleet = () => {
   const router = useRouter()
   const user = useSelector((state: RootState) => state.auth.user);
+
   return (
     <div className="container mx-auto py-2 ">
         <h1 className="text-3xl font-bold mb-8">Welcome, {user?.firstName} {user?.lastName}!</h1>
