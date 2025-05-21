@@ -8,6 +8,9 @@ import {
     ChevronDown,
   } from "lucide-react"
   import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+  import { useDispatch } from 'react-redux';
+import { logout } from '@/lib/redux/slices/authSlice';
+import { useRouter } from 'next/navigation';
 
   interface AdminDropdownProps {
     userName: string;
@@ -18,6 +21,14 @@ import {
   }
 function UserDropdown({ userName, avatarFallback, email = "admin@dreamworks.com", position = 'top' , className }: AdminDropdownProps) {
     const [isOpen, setIsOpen] = useState(false)
+    const dispatch = useDispatch();
+    const router = useRouter();
+
+    const handleLogout = () => {
+      dispatch(logout());
+      router.push('/login');
+      setIsOpen(false);
+    };
   
     return (
       <div className="relative">
@@ -48,7 +59,7 @@ function UserDropdown({ userName, avatarFallback, email = "admin@dreamworks.com"
                 Settings
               </button>
               <div className="my-1 border-t border-gray-100"></div>
-              <button className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-red-600 hover:bg-red-50">
+              <button onClick={handleLogout} className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-red-600 hover:bg-red-50">
                 <LogOut className="h-4 w-4" />
                 Log out
               </button>
