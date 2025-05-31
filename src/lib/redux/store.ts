@@ -14,6 +14,7 @@ import {
 } from 'redux-persist';
 import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import authReducer from './slices/authSlice';
+import { userApi } from './api/userApi';
 
 const createNoopStorage = () => ({
     getItem() {
@@ -40,6 +41,7 @@ const createNoopStorage = () => ({
   
   const rootReducer = combineReducers({
     auth: authReducer,
+    [userApi.reducerPath]: userApi.reducer,
   });
   
   const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -52,7 +54,7 @@ const createNoopStorage = () => ({
           serializableCheck: {
             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
           },
-        }),
+        }).concat(userApi.middleware),
     });
   
     setupListeners(store.dispatch);
