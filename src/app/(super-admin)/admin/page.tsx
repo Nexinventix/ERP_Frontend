@@ -17,7 +17,8 @@ import TableOptions from '@/components/app/TableOptions'
 import  ViewEditProfileModal  from './_components/ViewEditProfileModal'
 import { User,UserRoundPen ,Key, CloudDownload, Trash2  } from 'lucide-react';
 import DeleteConfirmatioNodal from '@/components/app/DeleteConfirmatioNodal'
-// import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+import {useGetAllUserQuery} from "@/lib/redux/api/userApi
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const users: any = [
@@ -108,6 +109,9 @@ const [isDialogOpen, setIsDialogOpen] = useState(false)
 const [userToDelete, setUserToDelete] = useState<any>(null) 
 // const isAuthenticated = useSelector((state: any) => state?.auth?.user)
 
+const { data: users, error, isLoading } = useGetAllUserQuery({});
+
+console.log("user data",users)
 const handleDeleteUser = () => {
   if (userToDelete) {
     console.log(`Deleting user with ID: ${userToDelete.id}`)
@@ -216,9 +220,7 @@ const handleDeleteUser = () => {
                   <div className="col-span-1">Actions</div>
                 </div>
                 <div className="divide-y">
-                  {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  users.map((user:any) => (
+                  {users?.map((user:any) => (
                     <div key={user.id} className="grid grid-cols-12 items-center px-6 py-4">
                       <div className="col-span-4 flex items-center gap-3">
                       <Avatar>
@@ -240,11 +242,15 @@ const handleDeleteUser = () => {
                               : "bg-red-100 text-red-800 hover:bg-red-100"
                           }
                         >
-                          {user.status}
+                          {/* {user.status} */}
+                          Inactive
                         </Badge>
                       </div>
                       <div className="col-span-3 text-sm">{user.department}</div>
-                      <div className="col-span-2 text-sm">{user.role}</div>
+                      <div className="col-span-2 text-sm">
+                        {/* {user.role} */}
+                        Staff
+                        </div>
                       <div className="col-span-1 text-right">
                        <TableOptions 
                        variant="dotsVertical"
@@ -307,13 +313,13 @@ const handleDeleteUser = () => {
                   <div className="col-span-1">Actions</div>
                 </div>
                 <div className="divide-y">
-                  {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  users.filter((user:any) => user.status === "Active").map((user:any) => (
+                  {users
+                    ?.filter((user:any) => user.status === "Active")
+                    ?.map((user:any) => (
                       <div key={user.id} className="grid grid-cols-12 items-center px-6 py-4">
                         <div className="col-span-4 flex items-center gap-3">
                         <Avatar>
-  <AvatarImage src={user.avatar || "/placeholder.svg"} alt={`${user.firstName} ${user.lastName}`.trim()} />
+  <AvatarImage src={user?.avatar || "/placeholder.svg"} alt={`${user.firstName} ${user.lastName}`.trim()} />
   <AvatarFallback>{user.firstName.charAt(0)}</AvatarFallback>
 </Avatar>
 <div>
@@ -347,9 +353,9 @@ const handleDeleteUser = () => {
                   <div className="col-span-1">Actions</div>
                 </div>
                 <div className="divide-y">
-                  {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  users.filter((user:any) => user.status === "Inactive").map((user:any) => (
+                  {users
+                    ?.filter((user:any) => user.status === "Inactive")
+                    ?.map((user:any) => (
                       <div key={user.id} className="grid grid-cols-12 items-center px-6 py-4">
                         <div className="col-span-4 flex items-center gap-3">
                         <Avatar>
