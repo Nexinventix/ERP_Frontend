@@ -4,10 +4,7 @@ import {
   Search,
   Filter,
   MoreVertical,
-  PlusIcon,
-  Table,
-  Trash,
-
+  PlusIcon
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -21,8 +18,9 @@ import  ViewEditProfileModal  from './_components/ViewEditProfileModal'
 import { User,UserRoundPen ,Key, CloudDownload, Trash2  } from 'lucide-react';
 import DeleteConfirmatioNodal from '@/components/app/DeleteConfirmatioNodal'
 import { useSelector } from 'react-redux'
-import {useGetAllUserQuery} from "@/lib/redux/api/userApi"
+import {useGetAllUserQuery} from "@/lib/redux/api/userApi
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const users: any = [
   {
     id: 1,
@@ -104,10 +102,12 @@ const users: any = [
 ]
 const Admin = () => {
 const [isModalOpen, setIsModalOpen] = React.useState(false);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const [selectedUser, setSelectedUser] = React.useState<any>(null);
 const [isDialogOpen, setIsDialogOpen] = useState(false) 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const [userToDelete, setUserToDelete] = useState<any>(null) 
-const isAuthenticated = useSelector((state: any) => state?.auth?.user)
+// const isAuthenticated = useSelector((state: any) => state?.auth?.user)
 
 const { data: users, error, isLoading } = useGetAllUserQuery({});
 
@@ -122,10 +122,10 @@ const handleDeleteUser = () => {
   }
 }
 
-const handleViewProfile = (user: any) => {
-  setSelectedUser(user)
-  setIsModalOpen(true)
-}
+// const handleViewProfile = (user: any) => {
+//   setSelectedUser(user)
+//   setIsModalOpen(true)
+// }
   return (
   <div>
     <main className="flex-1">

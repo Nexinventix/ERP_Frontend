@@ -3,9 +3,10 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Plus, MoreVertical } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Plus} from "lucide-react"
+// import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
+import { AddScheduleModal } from "../_components/AddScheduleModal"
 
 interface MaintenanceSchedule {
   id: string
@@ -18,7 +19,8 @@ interface MaintenanceSchedule {
 }
 
 export default function FleetSetupPage() {
-  const [schedules, setSchedules] = useState<MaintenanceSchedule[]>([
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [schedules] = useState<MaintenanceSchedule[]>([
     {
       id: "1",
       name: "Oil Change",
@@ -88,11 +90,13 @@ export default function FleetSetupPage() {
     <div className="container mx-auto py-8  ">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Maintenance Schedules</h1>
-        <Button className="bg-zinc-900 hover:bg-zinc-800">
+        <Button className="bg-zinc-900 hover:bg-zinc-800"
+        onClick={() => setIsModalOpen(true)}
+        >
           <Plus className="mr-2 h-4 w-4" /> Add New Schedule
         </Button>
       </div>
-
+      <AddScheduleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       <div className="bg-white rounded-lg overflow-hidden border border-gray-200">
         {/* Table Header */}
         <div className="bg-black text-white px-4 py-3 grid grid-cols-7 gap-4">
@@ -134,7 +138,7 @@ export default function FleetSetupPage() {
                 </Badge>
               </div>
               <div className="flex justify-end">
-                <DropdownMenu>
+                {/* <DropdownMenu>
                   <DropdownMenuTrigger asChild> 
                     <Button variant="ghost" size="icon">
                       <MoreVertical className="h-4" />
@@ -150,7 +154,7 @@ export default function FleetSetupPage() {
                       <DropdownMenuItem>Activate</DropdownMenuItem>
                     )}
                   </DropdownMenuContent>
-                </DropdownMenu>
+                </DropdownMenu> */}
               </div>
             </div>
           ))}
