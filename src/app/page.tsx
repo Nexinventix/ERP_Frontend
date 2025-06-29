@@ -16,41 +16,44 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(false)
   const isAuthenticated = useSelector((state: any) => state.auth.token)
   const isUser = useSelector((state: any) => state.auth.user)
-  
-  console.log("Get Started clicked", isAuthenticated)
 
   const currentDate = new Date();
   const formattedDateTime = format(currentDate, "EEEE, MMMM d, yyyy, h:mm a 'WAT'")
-  const handleGetStarted = () => {
   
-    // setIsLoading(true)
+  const handleGetStarted = async () => {
+  
+    setIsLoading(true)
     // if (selectedModule === "FLEET") {
     //   router.push("/fleet")
     // } else if (selectedModule) {
     //   setShowUnavailable(true)
     // }
-    if (!isAuthenticated) {
-      // If not authenticated, redirect to login
-      router.push('/login')
-      return
+    try {
+      if (!isAuthenticated) {
+        // If not authenticated, redirect to login
+        router.push('/login');
+        return;
+      }
+  
+      if (selectedModule === "ADMIN" && !isUser?.isSuperAdmin) {
+        toast.error("You don't have permission to access the admin dashboard");
+        return;
+      }
+  
+      // If authenticated, handle module routing
+      if (selectedModule === "FLEET") {
+        await router.push("/fleet"); // Using await for the navigation
+      } else if (selectedModule === "ADMIN") {
+        await router.push("/admin");
+      } else if (selectedModule) {
+        setShowUnavailable(true);
+      }
+    } catch (error) {
+      console.error("Navigation error:", error);
+      toast.error("An error occurred during navigation");
+    } finally {
+      setIsLoading(false); // Stop loading regardless of success or failure
     }
-
-    if (selectedModule === "ADMIN" && !isUser?.isSuperAdmin) {
-      toast.error("You don't have permission to access the admin dashboard")
-      return
-    }
-
-    // If authenticated, handle module routing
-    if (selectedModule === "FLEET") {
-      router.push("/fleet")
-    }else if (selectedModule === "ADMIN") {
-      router.push("/admin")
-    } 
-     else if (selectedModule) {
-      setShowUnavailable(true)
-    }
-    
-    setIsLoading(false)
   }
   return (
     <div className="relative flex flex-col min-h-screen text-white overflow-hidden">
