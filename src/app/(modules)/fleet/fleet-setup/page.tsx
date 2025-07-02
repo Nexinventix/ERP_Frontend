@@ -10,6 +10,7 @@ import {useGetAllFleetQuery} from "@/lib/redux/api/fleetApi"
 import { Card, CardContent } from "@/components/ui/card"
 import Link from "next/link"
 
+
 interface VehicleMetric {
   title: string
   value: number
@@ -167,6 +168,7 @@ export default function FleetSetupPage() {
       <div className="bg-black text-white px-4 py-3 grid grid-cols-6 gap-4">
         <div className="flex items-center">
           <span className="ml-8">Vehicle Name</span>
+
         </div>
         <div>Type</div>
         <div>Registration</div>

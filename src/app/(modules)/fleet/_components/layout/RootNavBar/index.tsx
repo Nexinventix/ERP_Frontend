@@ -1,9 +1,13 @@
+"use client"
 import UserDropdown from '@/components/app/UserDropDown'
 import { Input } from '@/components/ui/input'
-import { Badge, Bell, HelpCircle, Search } from 'lucide-react'
+import { Bell, HelpCircle, Search } from 'lucide-react'
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/lib/redux/store'
 
 const RootNavBar = () => {
+  const user = useSelector((state: RootState) => state.auth.user);
   return (
     <div className="flex items-center justify-between  py-4 ">
     <div className="relative w-full max-w-md">
@@ -27,8 +31,8 @@ const RootNavBar = () => {
       </div>
       <div className="bg-gray-900 rounded-lg px-4 py-2 flex items-center gap-2 text-white">
       <UserDropdown
-            userName="Janet Asuquo"
-            avatarFallback="Admin"
+            userName={`${user?.firstName} ${user?.lastName}`}
+            avatarFallback={user?.firstName?.charAt(0) || ''}
             position='bottom'
             className='h-7'
             />
