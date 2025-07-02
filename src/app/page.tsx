@@ -19,13 +19,14 @@ export default function Dashboard() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isUser = useSelector((state: any) => state.auth.user)
   
-  console.log("Get Started clicked", isAuthenticated)
+  // console.log("Get Started clicked", isAuthenticated)
 
   const currentDate = new Date();
   const formattedDateTime = format(currentDate, "EEEE, MMMM d, yyyy, h:mm a 'WAT'")
+
   const handleGetStarted = () => {
   
-    // setIsLoading(true)
+    setIsLoading(true)
     // if (selectedModule === "FLEET") {
     //   router.push("/fleet")
     // } else if (selectedModule) {
@@ -39,17 +40,22 @@ export default function Dashboard() {
 
     if (selectedModule === "ADMIN" && !isUser?.isSuperAdmin) {
       toast.error("You don't have permission to access the admin dashboard")
+      setIsLoading(false)
+      return
+    }else if (selectedModule === "ADMIN" && isUser?.isSuperAdmin) {
+      router.push("/admin")
+      // setIsLoading(false)
       return
     }
 
     // If authenticated, handle module routing
     if (selectedModule === "FLEET") {
       router.push("/fleet")
-    }else if (selectedModule === "ADMIN") {
-      router.push("/admin")
-    } 
+      // setIsLoading(false)
+    }
      else if (selectedModule) {
       setShowUnavailable(true)
+      // setIsLoading(false)
     }
     
     setIsLoading(false)
@@ -137,7 +143,7 @@ export default function Dashboard() {
             )}
 
         <Button 
-              className="w-full bg-[#021325] hover:bg-[#021320] text-white border-none py-6"
+              className="w-full bg-[#021325] hover:bg-[#021320] text-white border-none py-6 cursor-pointer"
               onClick={handleGetStarted}
               disabled={isLoading}
             >
@@ -149,7 +155,11 @@ export default function Dashboard() {
       <footer className="relative z-10 p-6 text-center text-xs text-gray-300">
         <div className="mb-2">
           <Link href="#" className="hover:text-white">
-            Janeth Asuquo
+          {
+          isUser && (
+            isUser.firstName + " " + isUser.lastName
+          )
+          }
           </Link>{" "}
           |
           <Link href="#" className="hover:text-white ml-2">

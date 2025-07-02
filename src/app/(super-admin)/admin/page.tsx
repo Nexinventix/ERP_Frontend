@@ -18,7 +18,7 @@ import  ViewEditProfileModal  from './_components/ViewEditProfileModal'
 import { User,UserRoundPen ,Key, CloudDownload, Trash2  } from 'lucide-react';
 import DeleteConfirmatioNodal from '@/components/app/DeleteConfirmatioNodal'
 import { useSelector } from 'react-redux'
-import {useGetAllUserQuery} from "@/lib/redux/api/userApi
+import {useGetAllUserQuery} from "@/lib/redux/api/userApi"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const users: any = [

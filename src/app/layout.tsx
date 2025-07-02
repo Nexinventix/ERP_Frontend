@@ -26,7 +26,7 @@ export default function RootLayout({
         <body className={primaryFont.variable}>
           <ReduxProvider>
             {children}
-            <Toaster />
+            {/* <Toaster /> */}
           </ReduxProvider>
           <Toaster position="top-right" richColors />
         </body>

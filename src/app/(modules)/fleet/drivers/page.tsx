@@ -1,11 +1,14 @@
+"use client"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Search, Plus, Filter, MoreVertical } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function DriverManagement() {
+    const router = useRouter()
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="flex flex-col space-y-4">
@@ -81,7 +84,7 @@ export default function DriverManagement() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View details</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => router.push(`/fleet/drivers/${driver.id}`)}>View details</DropdownMenuItem>
                         <DropdownMenuItem>Edit driver</DropdownMenuItem>
                         <DropdownMenuItem>Delete driver</DropdownMenuItem>
                       </DropdownMenuContent>
