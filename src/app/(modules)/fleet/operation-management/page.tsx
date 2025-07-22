@@ -8,10 +8,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import TripScheduleModal from "@/components/app/addTrip/trip-shedule-modal"
 
 export default function OperationsManagement() {
   const [searchTrip, setSearchTrip] = useState("")
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   // Mock data for trips
   const tripsData = [
@@ -141,7 +143,7 @@ export default function OperationsManagement() {
                   <Filter className="h-4 w-4 mr-2" />
                   Filters
                 </Button>
-                <Button className="bg-slate-800 hover:bg-slate-700 text-white">
+                <Button onClick={() => setIsModalOpen(true)} className="bg-slate-800 hover:bg-slate-700 text-white">
                   <Plus className="h-4 w-4 mr-2" />
                   Add new trip
                 </Button>
@@ -240,6 +242,7 @@ export default function OperationsManagement() {
             </div>
           </CardContent>
         </Card>
+        <TripScheduleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </div>
     </div>
   )

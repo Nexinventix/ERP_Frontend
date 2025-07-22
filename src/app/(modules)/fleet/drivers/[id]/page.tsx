@@ -1,9 +1,20 @@
 "use client"
-import Image from "next/image"
+// import Image from "next/image"
 import { ArrowLeft, Download, Edit, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { useRouter } from "next/navigation"
+// import { useRouter } from "next/navigation"
+import {useGetDriverDetailsQuery} from "@/lib/redux/api/driverApi"
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
+import { saveAs } from 'file-saver';
+import JSZip from 'jszip';
+
+type Certification = {
+  type: string;
+  documentPath: string;
+};
+
+
 
 type Props = {
   params: {
@@ -12,22 +23,63 @@ type Props = {
 };
 
 export default function Component({ params }: Props) {
-    const router = useRouter()
-  const documents = [
-    { name: "kamoru-driver-license.pdf", label: "Driver License" },
-    { name: "kamoru-national-id-card.pdf", label: "National ID" },
-    { name: "kamoru-road-worthiness.pdf", label: "Road Worthiness" },
-    { name: "kamoru-medical-fitness.pdf", label: "Medical Fitness" },
-    { name: "kamoru-vehicle-license.pdf", label: "Vehicle License" },
-    { name: "kamoru-proof-of-ownership.pdf", label: "Proof of Ownership" },
-  ]
+    // const router = useRouter();
+    // const { id } = React.use(params);
+    const {data: driverInfo, isLoading}= useGetDriverDetailsQuery(params?.id);
+    const driverCerts = driverInfo?.certifications || [];
+    const vehicleCerts = driverInfo?.assignedVehicle?.certifications || [];
+    const allDocs = [...driverCerts, ...vehicleCerts];
+
+     async function downloadAllAsZip() {
+        const zip = new JSZip();
+    
+        for (const doc of allDocs) {
+          try {
+            const response = await fetch(doc.documentPath);
+            const blob = await response.blob();
+            const fileName = `${doc.type.toLowerCase().replace(/\s/g, '-')}.pdf`;
+    
+            zip.file(fileName, blob);
+          } catch (err) {
+            console.error(`Failed to fetch ${doc.type}:`, err);
+          }
+        }
+    
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        saveAs(zipBlob, 'certifications.zip');
+      }
+
+  function formatToYYYYMMDD(dateString: string) {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        console.error("Invalid date:", dateString);
+        return null;
+      }
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+
+      return `${year}-${month}-${day}`;
+    }
+  // const documents = [
+  //   { name: "kamoru-driver-license.pdf", label: "Driver License" },
+  //   { name: "kamoru-national-id-card.pdf", label: "National ID" },
+  //   { name: "kamoru-road-worthiness.pdf", label: "Road Worthiness" },
+  //   { name: "kamoru-medical-fitness.pdf", label: "Medical Fitness" },
+  //   { name: "kamoru-vehicle-license.pdf", label: "Vehicle License" },
+  //   { name: "kamoru-proof-of-ownership.pdf", label: "Proof of Ownership" },
+  // ]
+  if (isLoading) {
+      return <div>Loading...</div>;
+    }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <div className="flex items-center gap-2 mb-4" onClick={() => router.back()}>
+          <div className="flex items-center gap-2 mb-4" onClick={() => window.history.back()}>
             <Button variant="ghost" size="sm" className="p-1">
               <ArrowLeft className="w-4 h-4" />
             </Button>
@@ -68,50 +120,47 @@ export default function Component({ params }: Props) {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-start gap-4 mb-6">
-                <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200">
-                  <Image
-                    src="/placeholder.svg?height=64&width=64"
-                    alt="Driver profile"
-                    width={64}
-                    height={64}
-                    className="w-full h-full object-cover"
-                  />
+                <div className="w-16 h-16 flex items-center justify-center rounded-full overflow-hidden bg-gray-200">
+                  <Avatar>
+                      <AvatarImage src={driverInfo?.photo || "/placeholder.svg"} alt={driverInfo?.personalInfo?.name} />
+                      <AvatarFallback>{driverInfo?.personalInfo?.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
                 </div>
                 <div>
-                  <h2 className="text-lg font-semibold text-gray-900">Alhaji Chibuike Kamoru</h2>
+                  <h2 className="text-lg font-semibold text-gray-900">{driverInfo?.personalInfo?.name}</h2>
                   <p className="text-sm text-gray-600">Driver</p>
                 </div>
               </div>
 
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm text-gray-600">Email Address</label>
-                  <p className="text-sm font-medium text-gray-900">abubakarsolao0@gmail.com</p>
+                  <label className="text-sm text-gray-600">Address</label>
+                  <p className="text-sm font-medium text-gray-900">{driverInfo?.personalInfo?.address}</p>
                 </div>
 
                 <div>
                   <label className="text-sm text-gray-600">Phone Number</label>
-                  <p className="text-sm font-medium text-gray-900">+234901234567B</p>
+                  <p className="text-sm font-medium text-gray-900">{driverInfo?.personalInfo?.conatct}</p>
                 </div>
 
-                <div>
+                {/* <div>
                   <label className="text-sm text-gray-600">National ID Number</label>
                   <p className="text-sm font-medium text-gray-900">12345678901</p>
-                </div>
+                </div> */}
 
                 <div>
                   <label className="text-sm text-gray-600">License Number</label>
-                  <p className="text-sm font-medium text-gray-900">gh231457908868</p>
+                  <p className="text-sm font-medium text-gray-900">{driverInfo?.personalInfo?.licenseNumber}</p>
                 </div>
 
-                <div>
+                {/* <div>
                   <label className="text-sm text-gray-600">License Type</label>
                   <p className="text-sm font-medium text-gray-900">Class C</p>
-                </div>
+                </div> */}
 
                 <div>
                   <label className="text-sm text-gray-600">License Expiry date</label>
-                  <p className="text-sm font-medium text-gray-900">2030-03-15</p>
+                  <p className="text-sm font-medium text-gray-900">{formatToYYYYMMDD(driverInfo?.personalInfo?.licenseExpiry)}</p>
                 </div>
               </div>
             </CardContent>
@@ -123,17 +172,17 @@ export default function Component({ params }: Props) {
               <h3 className="text-lg font-semibold text-gray-900 mb-6">Driver Details / View Documents</h3>
 
               <div className="grid grid-cols-3 gap-4 mb-6">
-                {documents.map((doc, index) => (
+                {allDocs.map((doc, index) => (
                   <div key={index} className="flex flex-col items-center text-center">
                     <div className="w-16 h-20 bg-gray-600 rounded flex items-center justify-center mb-2">
                       <div className="text-white text-xs font-bold">PDF</div>
                     </div>
-                    <p className="text-xs text-gray-600 leading-tight">{doc.name}</p>
+                    <p className="text-xs text-gray-600 leading-tight">{doc.type}</p>
                   </div>
                 ))}
               </div>
 
-              <Button className="w-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center gap-2">
+              <Button onClick={downloadAllAsZip} className="w-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center gap-2">
                 <Download className="w-4 h-4" />
                 Download All (zip)
               </Button>

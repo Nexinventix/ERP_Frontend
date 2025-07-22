@@ -100,7 +100,7 @@ export default function FleetSetupPage() {
 
 <div className="container mx-auto py-8 space-y-8">
       {/* Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {metrics.map((metric, index) => (
           <Card key={index} className="border border-gray-200">
             <CardContent className="p-6">
@@ -111,7 +111,7 @@ export default function FleetSetupPage() {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </div> */}
 
     
       {/* <div className="space-y-6">

@@ -17,6 +17,8 @@ import authReducer from './slices/authSlice';
 import { userApi } from './api/userApi';
 import {fleetApi} from "./api/fleetApi"
 import {driverApi} from "./api/driverApi"
+import { infoGraphicsApi } from './api/infoGraphicsApi';
+
 
 const createNoopStorage = () => ({
     getItem() {
@@ -46,6 +48,7 @@ const createNoopStorage = () => ({
     [userApi.reducerPath]: userApi.reducer,
     [fleetApi.reducerPath]: fleetApi.reducer,
     [driverApi.reducerPath]: driverApi.reducer,
+    [infoGraphicsApi.reducerPath]: infoGraphicsApi.reducer,
   });
   
   const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -60,7 +63,8 @@ const createNoopStorage = () => ({
           },
         }).concat(userApi.middleware,
           fleetApi.middleware,
-          driverApi.middleware
+          driverApi.middleware,
+          infoGraphicsApi.middleware
         ),
     });
   

@@ -34,10 +34,15 @@ export const driverApi = createApi({
             query: () => `/drivers`,
             providesTags: ['Driver'],
         }),
+        getDriverDetails: builder.query({
+            query: (driverId)=> `/drivers/${driverId}`,
+            providesTags: ['Driver']
+        })
     }),
 });
 
 export const {
     useCreateDriverMutation,
     useGetAllDriverQuery,
+    useGetDriverDetailsQuery
 } = driverApi;

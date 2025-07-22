@@ -47,7 +47,7 @@ const TableOptions = ({ variant = 'default', options }: TableOptionsProps) => {
         return (
           <div key={index} className="w-full">
             {React.cloneElement(option.icon, {
-              className: "w-full text-left px-3 py-2 text-sm hover:bg-gray-100",
+              className: "w-full text-left px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer",
               onClick: (e: React.MouseEvent) => {
                 option.onClick?.();
                 e.stopPropagation();
@@ -61,7 +61,7 @@ const TableOptions = ({ variant = 'default', options }: TableOptionsProps) => {
           <Link
             key={index}
             href={option.nextHref}
-            className="flex items-center py-2 gap-2 px-3 text-sm hover:bg-gray-100 w-full"
+            className="flex items-center py-2 gap-2 px-3 text-sm hover:bg-gray-100 w-full cursor-pointer"
             onClick={(e) => {
               option.onClick?.();
               e.stopPropagation();

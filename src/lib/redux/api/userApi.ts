@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { create } from 'domain';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
@@ -26,7 +25,7 @@ export const userApi = createApi({
             query: (userData) => ({
                 url: `/create-user`,
                 method: 'POST',
-                body:userData,
+                body: userData,
             }), 
             invalidatesTags: ['User'],
         }),
@@ -34,10 +33,26 @@ export const userApi = createApi({
             query: () => `/users`,
             providesTags: ['User'],
         }),
+        getSingleUser: builder.query({
+            query: (id) => `/user/${id}`,
+            providesTags: ['User'],
+        }),
+        grantPermissions: builder.mutation({
+            query: ({ id, permissions }) => ({
+                url: `/grant-permissions/${id}`,
+                method: 'PATCH',
+                body: { permissions },
+            }),
+            invalidatesTags: ['User'],
+        }),
     }),
 });
+
+
 
 export const {
     useCreateUserMutation,
     useGetAllUserQuery,
+    useGetSingleUserQuery,
+    useGrantPermissionsMutation
 } = userApi;

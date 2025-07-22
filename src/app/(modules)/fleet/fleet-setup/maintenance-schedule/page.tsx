@@ -19,6 +19,7 @@ import Link from "next/link"
 import { Textarea } from "@/components/ui/textarea"
 import { useCreateMaintenanceMutation, useGetAllFleetQuery  } from "@/lib/redux/api/fleetApi"
 
+
 const maintenanceSchema = z.object({
   scheduleOption: z.enum(["all", "specific"]),
   vehicleId: z.string().optional(),
@@ -38,7 +39,9 @@ export default function MaintenanceSchedule() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const [createMaintenance] = useCreateMaintenanceMutation()
-  const { data: vehiclesData, isLoading: isVehiclesLoading, error: vehiclesError } = useGetAllFleetQuery({})
+  const { data: vehiclesData, isLoading: isVehiclesLoading, error: vehiclesError } = useGetAllFleetQuery({});
+
+  
 
   const form = useForm<MaintenanceFormValues>({
     resolver: zodResolver(maintenanceSchema),
@@ -58,18 +61,18 @@ export default function MaintenanceSchedule() {
 
   const vehicles = vehiclesData?.map((vehicle:any) => ({
     id: vehicle._id, // or vehicle.id depending on your API response
-    name: `${vehicle.make} ${vehicle.model} - ${vehicle.licensePlate}`
+    name: `${vehicle.make} ${vehicle.model} - ${vehicle.plateNumber}`
   })) || []
 
 
   const maintenanceTypes = [
     "scheduled",
     "repair",
-    "inspection",
+    // "inspection",
     "emergency",
-    "preventive",
-    "predictive",
-    "corrective"
+    // "preventive",
+    // "predictive",
+    // "corrective"
   ]
 
   const onSubmit = async (data: MaintenanceFormValues) => {
