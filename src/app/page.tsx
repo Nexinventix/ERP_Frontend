@@ -14,49 +14,57 @@ export default function Dashboard() {
   const [selectedModule, setSelectedModule] = useState("")
   const [showUnavailable, setShowUnavailable] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [buttonText, setButtonText]= useState("Get Started")
+ 
   const isAuthenticated = useSelector((state: any) => state.auth.token)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  
   const isUser = useSelector((state: any) => state.auth.user)
 
   const currentDate = new Date();
   const formattedDateTime = format(currentDate, "EEEE, MMMM d, yyyy, h:mm a 'WAT'")
   
+
   const handleGetStarted = async () => {
-  
-    setIsLoading(true)
-    // if (selectedModule === "FLEET") {
-    //   router.push("/fleet")
-    // } else if (selectedModule) {
-    //   setShowUnavailable(true)
-    // }
     try {
+      // Set loading state first
+      setIsLoading(true);
+      setButtonText("Loading...");
+      
+      // Force a re-render to show the loading state
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
       if (!isAuthenticated) {
-        // If not authenticated, redirect to login
         router.push('/login');
+        setButtonText("Get Started");
         return;
       }
   
       if (selectedModule === "ADMIN" && !isUser?.isSuperAdmin) {
         toast.error("You don't have permission to access the admin dashboard");
+        setButtonText("Get Started");
         return;
       }
   
-      // If authenticated, handle module routing
       if (selectedModule === "FLEET") {
-        await router.push("/fleet"); // Using await for the navigation
+        router.push("/fleet");
+        setButtonText("Get Started");
       } else if (selectedModule === "ADMIN") {
-        await router.push("/admin");
+        router.push("/admin");
+        setButtonText("Get Started");
       } else if (selectedModule) {
         setShowUnavailable(true);
+        setButtonText("Get Started");
       }
     } catch (error) {
       console.error("Navigation error:", error);
       toast.error("An error occurred during navigation");
+      setButtonText("Get Started");
     } finally {
-      setIsLoading(false); // Stop loading regardless of success or failure
+      // Reset loading state
+      setIsLoading(false);
     }
-  }
+  };
+
   return (
     <div className="relative flex flex-col min-h-screen text-white overflow-hidden">
         <div 
@@ -140,11 +148,11 @@ export default function Dashboard() {
             )}
 
         <Button 
-              className="w-full bg-[#021325] hover:bg-[#021320] text-white border-none py-6"
-              onClick={handleGetStarted}
+              className="w-full bg-[#021325] hover:bg-[#021320] text-white border-none py-6 cursor-pointer"
+              onClick={()=>handleGetStarted()}
               disabled={isLoading}
             >
-              {isLoading ? "Loading..." : "Get Started"}
+              {buttonText}
             </Button>
           </div>
         </div>
@@ -152,7 +160,11 @@ export default function Dashboard() {
       <footer className="relative z-10 p-6 text-center text-xs text-gray-300">
         <div className="mb-2">
           <Link href="#" className="hover:text-white">
-            Janeth Asuquo
+          {
+          isUser && (
+            isUser.firstName + " " + isUser.lastName
+          )
+          }
           </Link>{" "}
           |
           <Link href="#" className="hover:text-white ml-2">

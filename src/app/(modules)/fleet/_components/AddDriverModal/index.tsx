@@ -5,7 +5,7 @@ import { toast } from "sonner"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+// import { Label } from "@/components/ui/label"
 import { Upload, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useForm } from "react-hook-form"
@@ -115,11 +115,11 @@ const AddDriverModal = ({ open, onOpenChange }: AddDriverModalProps) => {
       onOpenChange(false)
       form.reset()
       setCurrentStep(1)
-    } catch (error:any) {
-        if (error?.data?.message) {
-            toast.error(error.data.message);
-          } else if (error?.message) {
-            toast.error(error.message);
+    } catch (error:unknown) {
+        if ((error as any)?.data?.message) {
+            toast.error((error as any).data.message);
+          } else if ((error as any)?.message) {
+            toast.error((error as any).message);
           } else {
             toast.error("Failed to add driver");
           }
@@ -166,8 +166,8 @@ const AddDriverModal = ({ open, onOpenChange }: AddDriverModalProps) => {
   )
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[800px]">
+    <Dialog open={open} onOpenChange={onOpenChange} >
+      <DialogContent className="sm:max-w-[800px] max-h-[95vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold">Add New Driver</DialogTitle>
         </DialogHeader>
@@ -179,24 +179,24 @@ const AddDriverModal = ({ open, onOpenChange }: AddDriverModalProps) => {
               <div
                 className={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium",
-                  currentStep >= 1 ? "bg-green-500 text-white" : "bg-gray-200 text-gray-600",
+                  currentStep >= 1 ? "bg-[#0a1929] text-white" : "bg-gray-200 text-gray-600",
                 )}
               >
                 {currentStep > 1 ? <Check className="w-4 h-4" /> : "1"}
               </div>
-              <span className="ml-2 text-sm font-medium text-green-600">Personal Information</span>
+              <span className="ml-2 text-sm font-medium text-[#0a1929]">Personal Information</span>
             </div>
             <div className="w-8 h-px bg-gray-300"></div>
             <div className="flex items-center">
               <div
                 className={cn(
                   "w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium",
-                  currentStep === 2 ? "bg-green-500 text-white" : "bg-gray-200 text-gray-600",
+                  currentStep === 2 ? "bg-[#0a1929] text-white" : "bg-gray-200 text-gray-600",
                 )}
               >
                 2
               </div>
-              <span className="ml-2 text-sm font-medium text-green-600">Essential Documents</span>
+              <span className="ml-2 text-sm font-medium text-[#0a1929]">Essential Documents</span>
             </div>
           </div>
         </div>

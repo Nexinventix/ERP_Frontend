@@ -33,7 +33,7 @@ type InviteUserFormValues = z.infer<typeof inviteUserSchema>
 export default function InviteUserPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
-  const [createUser, { isLoading: isUserLoading }] = useCreateUserMutation();
+  const [createUser] = useCreateUserMutation();
 
   const form = useForm<InviteUserFormValues>({
     resolver: zodResolver(inviteUserSchema),
@@ -59,9 +59,9 @@ export default function InviteUserPage() {
       form.reset(); 
       router.push('/admin');
       setIsLoading(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('API Error:', error);
-      toast.error(error.data?.message || error.message || 'Failed to invite user');
+      toast.error((error as any).data?.message || (error as any).message || 'Failed to invite user');
       setIsLoading(false);
     }
   }
@@ -169,11 +169,13 @@ export default function InviteUserPage() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Sales Fleet">Fleet Management</SelectItem>
-                      <SelectItem value="HR & Admin">HR Department</SelectItem>
+                      <SelectItem value="Fleet">Fleet Management</SelectItem>
+                      {/* <SelectItem value="HR & Admin">HR Department</SelectItem> */}
                       <SelectItem value="Finance">Finance</SelectItem>
-                      <SelectItem value="Courier">Courier</SelectItem>
-                      <SelectItem value="Customer service & Pricing">Customer service & Pricing</SelectItem>
+                      <SelectItem value="Logistics">Logistics</SelectItem>
+                      <SelectItem value="CRM">CRM</SelectItem>
+                      <SelectItem value="Air & Sea Operations">Air & Sea Operations</SelectItem>
+                      <SelectItem value="Pricing & Quotation">Pricing & Quotation</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

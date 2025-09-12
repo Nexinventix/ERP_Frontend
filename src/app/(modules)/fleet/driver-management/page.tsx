@@ -2,11 +2,11 @@
 import React from 'react'
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Plus, MoreVertical, Search, FileSearch, UserRoundPen, CloudDownload, Trash2, User } from "lucide-react"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Plus, Search, FileSearch, UserRoundPen, CloudDownload, Trash2, User } from "lucide-react"
+// import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import AddDriverModal from '../_components/AddDriverModal'
 import {useGetAllDriverQuery} from "@/lib/redux/api/driverApi"
 import { format } from 'date-fns'
@@ -55,6 +55,7 @@ interface Driver {
 const DriverManagement = () => {
     const [isAddDriverModalOpen, setIsAddDriverModalOpen] = useState(false)  
     const { data: drivers = [], isLoading } = useGetAllDriverQuery({})
+    // console.log(drivers)
 
     const formatDriverDate = (dateString: string) => {
       try {
@@ -113,7 +114,7 @@ const DriverManagement = () => {
     <div className="bg-white rounded-lg overflow-hidden ">
     <div className="bg-[#0a1929] text-white px-4 py-3 grid grid-cols-7 gap-4">
       <div>Photo</div>
-      <div>Driver's name</div>
+      <div>Driver&apos;s name</div>
       <div>License No</div>
       <div>License Expiry</div>
       <div>Phone No</div>

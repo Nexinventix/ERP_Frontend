@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { create } from 'domain';
+
+type PaginationParams = {
+    page?: number;
+    limit?: number;
+    query?: string;
+  };
 
 const baseQuery = fetchBaseQuery({
     baseUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
@@ -31,13 +36,42 @@ export const driverApi = createApi({
             invalidatesTags: ['Driver'],
         }),
         getAllDriver: builder.query({
-            query: () => `/drivers`,
+            // query: () => `/drivers`,
+            query: ({ page = 1, limit = 10, query }: PaginationParams = {}) => ({
+                url: query ? '/drivers/search' : '/drivers',
+                params: { 
+                    page, 
+                    limit,
+                    ...(query && { query })
+                },
+            }),
             providesTags: ['Driver'],
         }),
+        getDriverDetails: builder.query({
+            query: (driverId)=> `/drivers/${driverId}`,
+            providesTags: ['Driver']
+        }),
+        updateDriverStatus: builder.mutation({
+            query:(driverdata)=>({
+                url: `/drivers/${driverdata.id}?status=${driverdata.status}`,
+                method: 'PATCH',
+                invalidatesTags: ['Driver']
+            })
+        }),
+        deleteDriver: builder.mutation({
+            query:(id)=>({
+                url: `/drivers/${id}`,
+                method: 'DELETE',
+                invalidatesTags: ['Driver']
+            })
+        })
     }),
 });
 
 export const {
     useCreateDriverMutation,
     useGetAllDriverQuery,
+    useGetDriverDetailsQuery,
+    useUpdateDriverStatusMutation,
+    useDeleteDriverMutation
 } = driverApi;

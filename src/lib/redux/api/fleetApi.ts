@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { create } from 'domain';
+
+type PaginationParams = {
+  page?: number;
+  limit?: number;
+  query?: string;
+};
 
 const baseQuery = fetchBaseQuery({
     baseUrl: `${process.env.NEXT_PUBLIC_API_URL}`,
@@ -31,7 +36,14 @@ export const fleetApi = createApi({
             invalidatesTags: ['Fleet'],
         }),
         getAllFleet: builder.query({
-            query: () => `/vehicles`,
+            query: ({ page = 1, limit = 10, query }: PaginationParams = {}) => ({
+                url: query ? '/vehicles/search' : '/vehicles',
+                params: { 
+                    page, 
+                    limit,
+                    ...(query && { query })
+                },
+            }),
             providesTags: ['Fleet'],
         }),
         assignVehicle: builder.mutation({
