@@ -15,7 +15,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import TableOptions from '@/components/app/TableOptions'
 import ViewEditProfileModal from './_components/ViewEditProfileModal'
-import { User, UserRoundPen, Key, CloudDownload, Trash2 } from 'lucide-react';
+import { User, UserRoundPen, Key, Trash2 } from 'lucide-react';
 import DeleteConfirmatioNodal from '@/components/app/DeleteConfirmatioNodal'
 import { useDeleteUserMutation, useGetAllUserQuery } from "@/lib/redux/api/userApi"
 // import { Spinner } from "@/components/ui/spinner"
