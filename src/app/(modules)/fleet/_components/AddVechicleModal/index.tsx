@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Car } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { useForm, type Control, type SubmitHandler, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -24,13 +24,15 @@ export enum Department {
   AIR_SEA_OPERATIONS = 'Air & Sea operations'
 }
 
+const noSpace = (val: string) => !/\s/.test(val);
+
 const vehicleSchema = z.object({
     vehicleName: z.string().min(2, "Vehicle name is required"),
     vehicleModel: z.string().min(1, "Vehicle model is required"),
-    registration: z.string().min(1, "Registration is required"),
-    vehicleType: z.string().min(1, "Vehicle type is required"),
+    registration: z.preprocess((val) => typeof val === 'string' ? val.trim() : val, z.string().min(1, "Registration is required").refine(noSpace, { message: 'Registration must not contain spaces' })),
+  vehicleType: z.enum(['Bike', 'Car', 'Bus', 'Van', 'Truck'], { errorMap: () => ({ message: 'Vehicle type must be one of Bike, Car, Bus, Van or Truck' }) }),
     location: z.string().min(1, "Location is required"),
-    plateNumber: z.string().min(1, "Plate number is required"),
+    plateNumber: z.preprocess((val) => typeof val === 'string' ? val.trim() : val, z.string().min(1, "Plate number is required").refine(noSpace, { message: 'Plate number must not contain spaces' })),
     departments: z.string().min(1, "department  is required"),
     // energySource: z.string().min(1, "Energy source is required"),
     insurance_issueDate: z.string().min(1, "Insurance issue date is required"),
@@ -61,27 +63,30 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
       // license: driver.licenseNumber
     })) || []
     const form = useForm<VehicleFormValues>({
-        resolver: zodResolver(vehicleSchema),
+      resolver: zodResolver(vehicleSchema) as unknown as Resolver<VehicleFormValues>,
         defaultValues: {
-          vehicleName: "",
-          vehicleModel: "",
-          registration: "",
-          vehicleType: "",
-          location: "",
-          plateNumber: "",
-          departments: "HR & Admin",
-          currentDriver:"67ff51b648674b0b4906a17b",
-          // energySource: "",
-          insurance_issueDate: "",
-          insurance_expiryDate: "",
-          RoadWorthines_issueDate: "",
-          RoadWorthines_expiryDate: "",
-          insurance: undefined,
-          RoadWorthines: undefined,
-        },
-      });
+        vehicleName: "",
+        vehicleModel: "",
+        registration: "",
+          vehicleType: "Car",
+        location: "",
+        plateNumber: "",
+        departments: "",
+        currentDriver:"",
+        // energySource: "",
+        insurance_issueDate: "",
+        insurance_expiryDate: "",
+        RoadWorthines_issueDate: "",
+        RoadWorthines_expiryDate: "",
+        insurance: undefined,
+        RoadWorthines: undefined,
+      },
+    });
 
-      const onSubmit = async (data: VehicleFormValues) => {
+      // Cast control to the exact generic expected by FormField to resolve TS incompatibility
+      const control = form.control as unknown as Control<VehicleFormValues>;
+
+      const onSubmit: SubmitHandler<VehicleFormValues> = async (data) => {
         try {
             setIsLoading(true);
             const formData = new FormData();
@@ -119,7 +124,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-    <DialogContent className="sm:max-w-[900px]">
+    <DialogContent className="sm:max-w-[900px] sm:max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center gap-2">
             <Car className="h-6 w-6" />
@@ -133,7 +138,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
-                control={form.control}
+                control={control}
                 name="vehicleName"
                 render={({ field }) => (
                   <FormItem>
@@ -150,7 +155,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
               />
 
               <FormField
-                control={form.control}
+                control={control}
                 name="vehicleModel"
                 render={({ field }) => (
                   <FormItem>
@@ -167,7 +172,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
               />
 
               <FormField
-                control={form.control}
+                control={control}
                 name="registration"
                 render={({ field }) => (
                   <FormItem>
@@ -184,7 +189,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
               />
 
               <FormField
-                control={form.control}
+                control={control}
                 name="vehicleType"
                 render={({ field }) => (
                   <FormItem>
@@ -193,7 +198,20 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
                       <span className="text-red-500 ml-1">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Bike, Car, Bus, Van or Truck" className="bg-slate-50" {...field} />
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger className="bg-slate-50 w-70">
+                            <SelectValue placeholder="Select vehicle type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {['Bike', 'Car', 'Bus', 'Van', 'Truck'].map((t) => (
+                            <SelectItem key={t} value={t}>
+                              {t}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -201,7 +219,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
               />
 
               <FormField
-                control={form.control}
+                control={control}
                 name="location"
                 render={({ field }) => (
                   <FormItem>
@@ -218,7 +236,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
               />
 
               <FormField
-                control={form.control}
+                control={control}
                 name="plateNumber"
                 render={({ field }) => (
                   <FormItem>
@@ -235,7 +253,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
               />
 
           <FormField
-                control={form.control}
+                control={control}
                 name="departments"
                 render={({ field }) => (
                   <FormItem >
@@ -263,7 +281,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
               />
 
 <FormField
-                control={form.control}
+                control={control}
                 name="insurance_issueDate"
                 render={({ field }) => (
                   <FormItem>
@@ -284,7 +302,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
               />
 
             <FormField
-                control={form.control}
+                control={control}
                 name="insurance_expiryDate"
                 render={({ field }) => (
                   <FormItem>
@@ -305,7 +323,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
               />
 
             <FormField
-                control={form.control}
+                control={control}
                 name="RoadWorthines_issueDate"
                 render={({ field }) => (
                   <FormItem>
@@ -326,7 +344,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
               />
 
             <FormField
-                control={form.control}
+                control={control}
                 name="RoadWorthines_expiryDate"
                 render={({ field }) => (
                   <FormItem>
@@ -346,7 +364,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
                 )}
               />
                  <FormField
-                        control={form.control}
+                        control={control}
                         name="currentDriver"
                         render={({ field }) => (
                           <FormItem>
@@ -372,7 +390,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
 
 
 <FormField
-                control={form.control}
+                control={control}
                 name="insurance"
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 render={({ field: { value, onChange, ...field } }) => (
@@ -399,7 +417,7 @@ export function AddVehicleModal({ isOpen, onClose }: AddVehicleModalProps) {
               />
 
               <FormField
-                control={form.control}
+                control={control}
                 name="RoadWorthines"
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 render={({ field: { value, onChange, ...field } }) => (
