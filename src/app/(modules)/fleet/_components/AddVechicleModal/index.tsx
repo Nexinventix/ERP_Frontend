@@ -16,12 +16,12 @@ import {useCreateFleetMutation} from "@/lib/redux/api/fleetApi"
 import { useGetAllDriverQuery } from '@/lib/redux/api/driverApi';
 
 export enum Department {
-  CUSTOMER_SERVICE_PRICING = 'Customer service & Pricing',
-  SALES_FLEET = 'Sales Fleet',
-  COURIER = 'Courier',
-  HR_ADMIN = 'HR & Admin',
-  FINANCE = 'Finance',
-  AIR_SEA_OPERATIONS = 'Air & Sea operations'
+    FLEET = "Fleet",
+    FINANCE = "Finance",
+    LOGISTICS = "Logistics",
+    CRM = "CRM",
+    AIR_SEA_OPERATIONS = "Air & Sea Operations",
+    PRICING_QUOTATION = "Pricing & Quotation",
 }
 
 const noSpace = (val: string) => !/\s/.test(val);
